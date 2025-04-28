@@ -1,0 +1,25 @@
+.container {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px 12px;
+  width: 100%;
+  min-height: 116px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+
+  :global(.ant-input-outlined) {
+    border: none;
+  }
+
+  :global(.ant-input-outlined:focus-within) {
+    box-shadow: none;
+  }
+}
+
+.action {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}

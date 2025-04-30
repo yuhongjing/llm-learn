@@ -1,83 +1,17 @@
-import { Button } from 'antd';
+import { useState } from 'react';
 
+import { ChatList, ChatInput } from './components';
 import styles from './index.module.scss';
-
-import { ChatList, ChatInput } from '@/components';
+import type { IMessage } from './type';
 
 export default function ChatGPT() {
-  const messages = [
-    {
-      isUser: true,
-      content: '你好',
-    },
-    {
-      isUser: false,
-      content:
-        '你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀',
-    },
-    {
-      isUser: true,
-      content: '你好',
-    },
-    {
-      isUser: true,
-      content: '你好',
-    },
-    {
-      isUser: false,
-      content:
-        '你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀',
-    },
-    {
-      isUser: true,
-      content: '你好',
-    },
-    {
-      isUser: true,
-      content: '你好',
-    },
-    {
-      isUser: false,
-      content:
-        '你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀',
-    },
-    {
-      isUser: true,
-      content: '你好',
-    },
-    {
-      isUser: true,
-      content: '你好',
-    },
-    {
-      isUser: false,
-      content:
-        '你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀',
-    },
-    {
-      isUser: true,
-      content: '你好',
-    },
-    {
-      isUser: true,
-      content: '你好',
-    },
-    {
-      isUser: false,
-      content:
-        '你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀',
-    },
-    {
-      isUser: true,
-      content: '你好',
-    },
-  ];
+  const [messageList, setMessageList] = useState<IMessage[]>([]);
 
   return (
     <div className={styles.container}>
       <div className={styles.inner}>
-        <ChatList customStyle={{ flex: 1 }} messages={messages} />
-        <ChatInput />
+        <ChatList customStyle={{ flex: 1 }} messageList={messageList} />
+        <ChatInput messageList={messageList} setMessageList={setMessageList} />
       </div>
     </div>
   );

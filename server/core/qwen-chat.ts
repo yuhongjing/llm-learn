@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import OpenAI from "openai";
 import { v4 as uuidv4 } from "uuid";
 import "dotenv/config";
@@ -20,7 +18,7 @@ function getSessionMessage(sessionId: string): IMessage[] {
 function setSessionMessage(sessionId: string, message: IMessage): IMessage[] {
   const messageList = getSessionMessage(sessionId);
   messageList.push(message);
-  sessionMessage.set(sessionId, message);
+  sessionMessage.set(sessionId, messageList);
   return messageList;
 }
 
@@ -49,7 +47,7 @@ async function qwenChat(req: Request, res: Response) {
     sessionId = uuidv4();
     const systemMessage = {
       role: "system",
-      content: "You are a helpful assistant.",
+      content: "You are a helpful assis",
     };
     messageList.push(systemMessage);
     setSessionMessage(sessionId, systemMessage);

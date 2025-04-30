@@ -1,27 +1,20 @@
 import classNames from 'classnames';
 
+import { IMessage } from '../../type';
+
 import styles from './index.module.scss';
 
-export interface IMessage {
-  isUser: boolean;
-  content: string;
-}
-
 export interface IProps {
-  messages: IMessage[];
+  messageList: IMessage[];
   customStyle?: React.CSSProperties;
 }
 
 export default function ChatList(props: IProps) {
-  const { messages, customStyle } = props;
-
-  if (!messages?.length) {
-    return null;
-  }
+  const { messageList, customStyle } = props;
 
   return (
     <div className={styles.container} style={customStyle}>
-      {messages.map((item, idx) => (
+      {messageList?.map?.((item, idx) => (
         <div
           key={item.content + idx}
           className={classNames(styles.message, { [styles.user]: item.isUser })}

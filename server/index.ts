@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import chalk from "chalk";
+import { qwenChat } from "./core/qwen-chat.js";
 
 const app = express();
 const port = 3000;
@@ -15,6 +16,9 @@ app.get("/", (req, res) => {
   console.log(chalk.green("测试"));
   res.json({ data: "test" });
 });
+
+// @ts-expect-error
+app.get("/qwen-chat", qwenChat);
 
 // @ts-expect-error
 app.use((err, req, res, next) => {

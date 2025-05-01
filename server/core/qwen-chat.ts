@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import { v4 as uuidv4 } from "uuid";
 import "dotenv/config";
 import chalk from "chalk";
+import MCPClient from "./mcp-client.js";
 
 interface IMessage {
   role: string; // 角色
@@ -59,20 +60,55 @@ async function qwenChat(req: Request, res: Response) {
   setSessionMessage(sessionId, userMessage);
 
   try {
+    const mcpClient = new MCPClient();
+    await mcpClient.connectToMcpServer(); // 连接到MCP服务器
+
     const openai = new OpenAI({
       apiKey: process.env.QWEN_API_KEY,
       baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
     });
 
+    // 判断是否需要调用MCP工具
     const completion = await openai.chat.completions.create({
       model: "qwen-plus", // 模型列表: https://help.aliyun.com/zh/model-studio/getting-started/models
       messages: messageList,
+      temperature: 0,
+      tools: mcpClient.toolsList,
+    });
+    const content = completion?.choices[0];
+    if (
+      content?.finish_reason === "tool_calls" &&
+      content.message.tool_calls?.length
+    ) {
+      messageList.push(content?.message);
+      for (const toolCall of content.message.tool_calls) {
+        const toolName = toolCall.function.name;
+        const toolArgs = JSON.parse(toolCall.function.arguments);
+
+        // 调用工具
+        const result = await mcpClient.callTool({
+          name: toolName,
+          args: toolArgs,
+        });
+        messageList.push({
+          role: "tool",
+          content: result?.content,
+          tool_call_id: toolCall.id,
+          name: toolName,
+        });
+      }
+    }
+
+    const response = await openai.chat.completions.create({
+      model: "qwen-plus",
+      messages: messageList,
+      tools: mcpClient.toolsList,
       stream: true,
       stream_options: { include_usage: true },
     });
 
     let fullContent = "";
-    for await (const chunk of completion) {
+    for await (const chunk of response) {
       // 如果stream_options.include_usage为true，则最后一个chunk的choices字段为空数组，需要跳过
       if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
         const content = chunk.choices[0].delta.content;

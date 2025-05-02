@@ -3,7 +3,7 @@ import OpenAI from "openai";
 import { v4 as uuidv4 } from "uuid";
 import "dotenv/config";
 import chalk from "chalk";
-import MCPClient from "./mcp-client.js";
+import Mcp from "./mcp/index.js";
 
 interface IMessage {
   role: string; // 角色
@@ -60,8 +60,9 @@ async function qwenChat(req: Request, res: Response) {
   setSessionMessage(sessionId, userMessage);
 
   try {
-    const mcpClient = new MCPClient();
-    await mcpClient.connectToMcpServer(); // 连接到MCP服务器
+    const mcp = new Mcp();
+    const mcpServerToolsList = await mcp.init();
+    console.log("mcpServerToolsList", mcpServerToolsList);
 
     const openai = new OpenAI({
       apiKey: process.env.QWEN_API_KEY,
@@ -73,7 +74,7 @@ async function qwenChat(req: Request, res: Response) {
       model: "qwen-plus", // 模型列表: https://help.aliyun.com/zh/model-studio/getting-started/models
       messages: messageList,
       temperature: 0,
-      tools: mcpClient.toolsList,
+      tools: mcpServerToolsList,
     });
     const content = completion?.choices[0];
     if (
@@ -86,7 +87,7 @@ async function qwenChat(req: Request, res: Response) {
         const toolArgs = JSON.parse(toolCall.function.arguments);
 
         // 调用工具
-        const result = await mcpClient.callTool({
+        const result = await mcp.callTool({
           name: toolName,
           args: toolArgs,
         });
@@ -102,7 +103,7 @@ async function qwenChat(req: Request, res: Response) {
     const response = await openai.chat.completions.create({
       model: "qwen-plus",
       messages: messageList,
-      tools: mcpClient.toolsList,
+      tools: mcpServerToolsList,
       stream: true,
       stream_options: { include_usage: true },
     });

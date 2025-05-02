@@ -6,7 +6,7 @@ class MCPClient extends McpBase {
   }
 
   async connect() {
-    await this.connectToMcpServer({
+    return await this.connectToMcpServer({
       command: "npm",
       args: ["run", "start"],
       cwd: "../mcp-server",
@@ -15,10 +15,6 @@ class MCPClient extends McpBase {
 
   async executeToolCall(name: string, args: any) {
     return this.callTool({ name, args });
-  }
-
-  getTools() {
-    return this.getToolsList();
   }
 }
 

@@ -7,21 +7,14 @@ class MCPMap extends McpBase {
   }
 
   async connect() {
-    await this.connectToMcpServer({
-      command: process.env.NPX_PATH || "npx",
-      args: ["-y", "@amap/amap-maps-mcp-server"],
-      env: {
-        AMAP_MAPS_API_KEY: process.env.GAODE_API_KEY || "",
-      },
+    return await this.connectToMcpServer({
+      mode: "sse",
+      url: process.env.GAODE_SSE_URL || "",
     });
   }
 
   async executeToolCall(name: string, args: any) {
     return this.callTool({ name, args });
-  }
-
-  getTools() {
-    return this.getToolsList();
   }
 }
 

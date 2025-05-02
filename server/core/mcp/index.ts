@@ -4,7 +4,7 @@ import MCPMap from "./mcp-map.js";
 
 const mcpServerConfig = [
   { name: "mcp-server", instance: new MCPClient() },
-  // { name: "mcp-map", instance: new MCPMap() },
+  { name: "mcp-map", instance: new MCPMap() },
 ];
 
 class McpManage {
@@ -15,8 +15,7 @@ class McpManage {
   async init() {
     for await (const config of mcpServerConfig) {
       const { name, instance } = config;
-      await instance.connect();
-      const curMcpServerToolsList = instance.getTools();
+      const curMcpServerToolsList = await instance.connect();
       this.mcpServerToolsList = [
         ...this.mcpServerToolsList,
         ...curMcpServerToolsList,

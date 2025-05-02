@@ -1,0 +1,31 @@
+{
+  "name": "llm-learn-server",
+  "version": "0.1.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && chmod 755 build/index.js",
+    "start": "npm run build && node build/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "yuhongjing",
+  "license": "MIT",
+  "description": "",
+  "dependencies": {
+    "@amap/amap-maps-mcp-server": "^0.0.8",
+    "@modelcontextprotocol/sdk": "^1.10.2",
+    "body-parser": "^2.2.0",
+    "chalk": "^5.4.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "openai": "^4.96.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "typescript": "^5.8.3"
+  }
+}

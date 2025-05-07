@@ -3,6 +3,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import chalk from "chalk";
 import { qwenChat } from "./core/qwen-chat.js";
+import { loggerMiddleware } from "./core/middlewares/logger.js";
 
 const app = express();
 const port = 3000;
@@ -11,10 +12,12 @@ const port = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(loggerMiddleware);
 
 app.get("/", (req, res) => {
-  console.log(chalk.green("测试"));
-  res.json({ data: "test" });
+  console.log(chalk.green("测试", req.logID));
+  req.logger.info({ data: "test", hello: "tt", tt: req.logID });
+  res.json({ data: "test", hello: "tt", tt: req.logID });
 });
 
 // @ts-expect-error

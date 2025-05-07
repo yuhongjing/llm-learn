@@ -35,6 +35,8 @@ async function qwenChat(req: Request, res: Response) {
   };
   const messageList: any[] = [];
 
+  req.logger.info({ data: message, sessionId });
+
   if (!message) {
     return res.status(400).json({ error: "请提供参数: message" });
   }
@@ -145,13 +147,22 @@ async function qwenChat(req: Request, res: Response) {
       content: fullContent,
     };
     setSessionMessage(sessionId, assistantMessage);
-    res.write(`data: ${JSON.stringify({ sessionId, done: true })}\n\n`);
-  } catch (error) {
+    res.write(
+      `data: ${JSON.stringify({ sessionId, done: true, logID: req.logID })}\n\n`
+    );
+  } catch (error: any) {
+    req.logger.error({ data: error, sessionId });
     console.error(chalk.red("ERROR: "), error);
     console.error(
       "请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code"
     );
-    res.write(`data: ${JSON.stringify({ sessionId, error: "发生错误" })}\n\n`);
+    res.write(
+      `data: ${JSON.stringify({
+        sessionId,
+        error: "发生错误",
+        logID: req.logID,
+      })}\n\n`
+    );
   } finally {
     res.end();
   }

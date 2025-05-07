@@ -8,8 +8,9 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "typeRoots": ["./types", "./node_modules/@types"]
   },
-  "include": ["index.ts", "core"],
+  "include": ["index.ts", "core", "helpers"],
   "exclude": ["node_modules"]
 }

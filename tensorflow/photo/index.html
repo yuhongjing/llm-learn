@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>图像识别</title>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>图像识别应用</h1>
+
+      <div class="upload-section">
+        <input type="file" id="imageUpload" accept="image/*" />
+        <label for="imageUpload">选择图片</label>
+        <img
+          id="imagePreview"
+          class="image-preview"
+          width="224"
+          height="224"
+          src="#"
+          alt="图片预览"
+        />
+      </div>
+
+      <div class="result-section">
+        <h2>识别结果:</h2>
+        <p id="resultText" class="placeholder-text">
+          上传图片后，将在此处显示识别结果。
+        </p>
+      </div>
+    </div>
+  </body>
+  <!-- 引入 TenorFlow.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+  <!-- 引入 MobileNet模型 -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@latest"></script>
+  <!-- 主文件 -->
+  <script src="./index.js"></script>
+</html>
